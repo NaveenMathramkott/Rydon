@@ -4,20 +4,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Swiper from "react-native-swiper";
 import { onboarding } from "@/constants";
 import { useRef, useState } from "react";
+import CustomButton from "@/components/CustomButton";
 
 const Welcome = () => {
   const swiperRef = useRef<Swiper>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const isLastSlide = activeIndex === onboarding.length - 1;
+
   return (
-    <SafeAreaView className="flex-1 bg-white items-center justify-center">
+    <SafeAreaView className="flex-1 bg-mainCol-gray items-center justify-center">
       <TouchableOpacity
         onPress={() => {
           router.replace("/(auth)/register");
         }}
         className="w-full flex justify-end items-end p-5"
       >
-        <Text className="text-black text-md font-JakartaBold">Skip</Text>
+        <Text className="text-mainCol-text text-md font-JakartaBold">Skip</Text>
       </TouchableOpacity>
       <Swiper
         ref={swiperRef}
@@ -34,11 +37,11 @@ const Welcome = () => {
           <View key={item.id} className="flex items-center justify-center p-5">
             <Image
               source={item.image}
-              className="w-full h-[400px]"
+              className="w-full h-[300px]"
               resizeMode="contain"
             />
             <View className="flex flex-row items-center justify-center w-full mt-10">
-              <Text className="text-black text-3xl font-bold mx-10 text-center">
+              <Text className="text-white text-3xl font-bold mx-10 text-center">
                 {item.title}
               </Text>
             </View>
@@ -48,6 +51,15 @@ const Welcome = () => {
           </View>
         ))}
       </Swiper>
+      <CustomButton
+        title={isLastSlide ? "Get Started" : "Next"}
+        onPress={() =>
+          isLastSlide
+            ? router.replace("/(auth)/register")
+            : swiperRef.current?.scrollBy(1)
+        }
+        className="w-11/12 mt-10 mb-5"
+      />
     </SafeAreaView>
   );
 };
